@@ -1,6 +1,7 @@
 import * as fs from "fs";
+import { yarg } from "./config/plugins/yargs.plugin";
 
-const base = 5;
+const { b: base, l: limit, s: showTable } = yarg;
 const folderPath: string = `outputs`;
 const path: string = `${folderPath}/tabla-${base}.txt`;
 const headerMessage: string = `
@@ -10,17 +11,19 @@ const headerMessage: string = `
 `;
 let outputMessage: string = "";
 
-//Header inicial
-console.log(headerMessage);
-
 //Creacion de Directorio
 fs.mkdirSync(folderPath, { recursive: true });
 //Si no existe el archivo lo crea vacio, Si existe lo limpia y lo deja vacio
 fs.writeFileSync(path, headerMessage);
 
-for (let index = 1; index <= 10; index++) {
+for (let index = 1; index <= limit; index++) {
   outputMessage += `${base} x ${index} = ${base * index}\n`;
 }
 outputMessage = headerMessage + outputMessage;
-console.log(outputMessage);
+
+if (showTable) {
+  console.log(outputMessage);
+}
+
 fs.writeFileSync(path, outputMessage);
+console.log("File created!");
